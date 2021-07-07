@@ -69,7 +69,7 @@
     </select>
 
 
-    <!-- 根据查询到的id关联categoryId 查询资源列表信息 -->
+    <!-- 根据角色id 查询资源列表信息 -->
     <select id="findAllResourceCategoryById" parameterType="int" resultType="com.lagou.entity.ResourceCategory">
         select distinct rc.* from resource_category rc inner join
          resource r on r.category_id = rc.id inner join

@@ -33,7 +33,7 @@ public class CourseController {
     @RequestMapping("/findCourseByCondition")
     public ResponseResult findCourseByCondition(@RequestBody CourseVo courseVo){
 
-
+        System.out.println("courseVo:::::::::::::"+courseVo.toString());
         List<Course> courseList = courseService.findCourseByCondition(courseVo);
 
         ResponseResult result = new ResponseResult(true, 200, "响应成功", courseList);

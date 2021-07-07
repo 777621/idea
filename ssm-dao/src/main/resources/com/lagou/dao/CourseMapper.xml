@@ -8,14 +8,14 @@
             resultType="com.lagou.entity.Course">
         select id,course_name,price,sort_num,status from course
         <where>
+            <if test="true">
+                and is_del != 1
+            </if>
             <if test="null !=courseName and courseName !=''">
                 and course_name like concat('%',#{courseName},'%')
             </if>
-            <if test="null !=status and status !=''">
+            <if test="null !=status">
                 and status = #{status}
-            </if>
-            <if test="true">
-                and is_del != 1
             </if>
         </where>
     </select>
