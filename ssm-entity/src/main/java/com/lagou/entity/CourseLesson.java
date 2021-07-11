@@ -1,28 +1,38 @@
 package com.lagou.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.util.Date;
 /**
  * 课时类
  * */
+@Table(name = "course_lesson")
 public class CourseLesson {
 
     //主键
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(generator="JDBC")
     private Integer id;
 
     //课程id
-    private int courseId;
+    @Column(name = "course_id")
+    private Integer courseId;
 
     //章节id
-    private int sectionId;
+    private Integer sectionId;
 
     //课时主题
     private String theme;
 
     //课时时长
-    private int duration;
+    //@JsonIgnore
+    private Integer duration;
 
     //是否免费
-    private int isFree;
+    private Integer isFree;
 
     //创建时间
     private Date createTime;
@@ -31,13 +41,13 @@ public class CourseLesson {
     private Date updateTime;
 
     //是否删除
-    private int isDel;
+    private Integer isDel;
 
     //排序
-    private int orderNum;
+    private Integer orderNum;
 
     //状态
-    private int status;
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -47,21 +57,7 @@ public class CourseLesson {
         this.id = id;
     }
 
-    public int getCourseId() {
-        return courseId;
-    }
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
-
-    public int getSectionId() {
-        return sectionId;
-    }
-
-    public void setSectionId(int sectionId) {
-        this.sectionId = sectionId;
-    }
 
     public String getTheme() {
         return theme;
@@ -71,20 +67,9 @@ public class CourseLesson {
         this.theme = theme;
     }
 
-    public int getDuration() {
+
+    public Integer getDuration() {
         return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public int getIsFree() {
-        return isFree;
-    }
-
-    public void setIsFree(int isFree) {
-        this.isFree = isFree;
     }
 
     public Date getCreateTime() {
@@ -103,27 +88,72 @@ public class CourseLesson {
         this.updateTime = updateTime;
     }
 
-    public int getIsDel() {
+    public Integer getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Integer courseId) {
+        this.courseId = courseId;
+    }
+
+    public Integer getSectionId() {
+        return sectionId;
+    }
+
+    public void setSectionId(Integer sectionId) {
+        this.sectionId = sectionId;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public Integer getIsFree() {
+        return isFree;
+    }
+
+    public void setIsFree(Integer isFree) {
+        this.isFree = isFree;
+    }
+
+    public Integer getIsDel() {
         return isDel;
     }
 
-    public void setIsDel(int isDel) {
+    public void setIsDel(Integer isDel) {
         this.isDel = isDel;
     }
 
-    public int getOrderNum() {
+    public Integer getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(int orderNum) {
+    public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "CourseLesson{" +
+                "id=" + id +
+                ", courseId=" + courseId +
+                ", sectionId=" + sectionId +
+                ", theme='" + theme + '\'' +
+                ", duration=" + duration +
+                ", isFree=" + isFree +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", isDel=" + isDel +
+                ", orderNum=" + orderNum +
+                ", status=" + status +
+                '}';
     }
 }

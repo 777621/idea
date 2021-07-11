@@ -1,10 +1,13 @@
 package com.lagou.service.impl;
 
 import com.lagou.dao.MenuMapper;
+import com.lagou.dao.RoleMenuRelationMapper;
 import com.lagou.entity.Menu;
+import com.lagou.entity.Role_menu_relation;
 import com.lagou.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -18,6 +21,9 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private MenuMapper menuMapper;
 
+    @Autowired
+    private RoleMenuRelationMapper roleMenuRelationMapper;
+
     /**
      * 查询父菜单及关联的子菜单信息
      * @param pid
@@ -26,7 +32,35 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Menu> findSubMenuListByPid(int pid) {
 
-        return menuMapper.findSubMenuListByPid(pid);
+        //return menuMapper.findSubMenuListByPid(pid);
+
+        Menu menu = new Menu();
+
+        Example example = new Example(Menu.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(menu.getParentId() != null){
+
+            criteria.andEqualTo("parentId",pid);
+        }
+
+        List<Menu> menuList = menuMapper.selectByExample(example);
+
+        for (Menu menu1 : menuList) {
+
+            Example example1 = new Example(Menu.class);
+
+            Example.Criteria criteria1 = example1.createCriteria();
+
+            criteria1.andEqualTo("id",menu1.getId());
+
+            List<Menu> subMenu = menuMapper.selectByExample(example1);
+
+            menu1.setSubMenuList(subMenu);
+        }
+
+        return menuList;
     }
 
     /**
@@ -36,7 +70,9 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Menu> findAllMenu() {
 
-        return menuMapper.findAllMenu();
+        //return menuMapper.findAllMenu();
+
+        return menuMapper.selectAll();
     }
 
     /**
@@ -47,7 +83,9 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public Menu findMenuById(Integer id) {
 
-        return menuMapper.findMenuById(id);
+        //return menuMapper.findMenuById(id);
+
+        return menuMapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -65,7 +103,8 @@ public class MenuServiceImpl implements MenuService {
         menu.setUpdatedTime(date);
 
         //调用业务
-        menuMapper.saveMenu(menu);
+        //menuMapper.saveMenu(menu);
+        menuMapper.insertSelective(menu);
     }
 
     /**
@@ -79,7 +118,8 @@ public class MenuServiceImpl implements MenuService {
         menu.setUpdatedTime(new Date());
 
         //调用业务
-        menuMapper.updateMenu(menu);
+        //menuMapper.updateMenu(menu);
+        menuMapper.updateByPrimaryKeySelective(menu);
     }
 
     /**
@@ -90,9 +130,21 @@ public class MenuServiceImpl implements MenuService {
     public void deleteMenu(Integer id) {
 
         //删除关联表的数据
-        menuMapper.deleteMenuContextRole(id);
+        //menuMapper.deleteMenuContextRole(id);
+
+        Example example = new Example(Role_menu_relation.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(id != null){
+
+            criteria.andEqualTo("menuId",id);
+        }
+
+        roleMenuRelationMapper.deleteByExample(example);
 
         //删除菜单信息
-        menuMapper.deleteMenu(id);
+        menuMapper.deleteByPrimaryKey(id);
+        //menuMapper.deleteMenu(id);
     }
 }

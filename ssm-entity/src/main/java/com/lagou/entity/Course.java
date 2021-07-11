@@ -1,13 +1,19 @@
 package com.lagou.entity;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 课程类
  */
-public class Course {
+@Table(name = "course")
+public class Course implements Serializable {
 
     //主键
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(generator="JDBC")
     private int id;
 
     //课程名称
@@ -17,13 +23,13 @@ public class Course {
     private String brief;
 
     //原价
-    private double price;
+    private Double price;
 
     //原价标签
     private String priceTag;
 
     //优惠价
-    private double discounts;
+    private Double discounts;
 
     //优惠价标签
     private String discountsTag;
@@ -38,13 +44,13 @@ public class Course {
     private String courseImgUrl;
 
     //是否新品
-    private int isNew;
+    private Integer isNew;
 
     //广告语
     private String isNewDes;
 
     //最后操作者
-    private int lastOperatorId;
+    private Integer lastOperatorId;
 
     //自动上架时间
     private Date autoOnlineTime;
@@ -56,19 +62,19 @@ public class Course {
     private Date updateTime;
 
     //是否删除
-    private int isDel;
+    private Integer isDel;
 
     //总时长
-    private int totalDuration;
+    private Integer totalDuration;
 
     //课程列表展示图片
     private String courseListImg;
 
     //课程状态，0-草稿，1-上架
-    private int status;
+    private Integer status;
 
     //课程排序
-    private int sortNum;
+    private Integer sortNum;
 
     //课程预览第一个字段
     private String previewFirstField;
@@ -77,15 +83,8 @@ public class Course {
     private String previewSecondField;
 
     //销量
-    private int sales;
+    private Integer sales;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getCourseName() {
         return courseName;
@@ -103,13 +102,6 @@ public class Course {
         this.brief = brief;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
 
     public String getPriceTag() {
         return priceTag;
@@ -119,13 +111,7 @@ public class Course {
         this.priceTag = priceTag;
     }
 
-    public double getDiscounts() {
-        return discounts;
-    }
 
-    public void setDiscounts(double discounts) {
-        this.discounts = discounts;
-    }
 
     public String getDiscountsTag() {
         return discountsTag;
@@ -159,12 +145,12 @@ public class Course {
         this.courseImgUrl = courseImgUrl;
     }
 
-    public int getIsNew() {
-        return isNew;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setIsNew(int isNew) {
-        this.isNew = isNew;
+    public Double getDiscounts() {
+        return discounts;
     }
 
     public String getIsNewDes() {
@@ -175,12 +161,8 @@ public class Course {
         this.isNewDes = isNewDes;
     }
 
-    public int getLastOperatorId() {
+    public Integer getLastOperatorId() {
         return lastOperatorId;
-    }
-
-    public void setLastOperatorId(int lastOperatorId) {
-        this.lastOperatorId = lastOperatorId;
     }
 
     public Date getAutoOnlineTime() {
@@ -207,21 +189,14 @@ public class Course {
         this.updateTime = updateTime;
     }
 
-    public int getIsDel() {
+    public Integer getIsDel() {
         return isDel;
     }
 
-    public void setIsDel(int isDel) {
+    public void setIsDel(Integer isDel) {
         this.isDel = isDel;
     }
 
-    public int getTotalDuration() {
-        return totalDuration;
-    }
-
-    public void setTotalDuration(int totalDuration) {
-        this.totalDuration = totalDuration;
-    }
 
     public String getCourseListImg() {
         return courseListImg;
@@ -231,21 +206,14 @@ public class Course {
         this.courseListImg = courseListImg;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public int getSortNum() {
-        return sortNum;
-    }
-
-    public void setSortNum(int sortNum) {
-        this.sortNum = sortNum;
-    }
 
     public String getPreviewFirstField() {
         return previewFirstField;
@@ -263,11 +231,55 @@ public class Course {
         this.previewSecondField = previewSecondField;
     }
 
-    public int getSales() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setDiscounts(Double discounts) {
+        this.discounts = discounts;
+    }
+
+    public Integer getIsNew() {
+        return isNew;
+    }
+
+    public void setIsNew(Integer isNew) {
+        this.isNew = isNew;
+    }
+
+    public void setLastOperatorId(Integer lastOperatorId) {
+        this.lastOperatorId = lastOperatorId;
+    }
+
+    public Integer getTotalDuration() {
+        return totalDuration;
+    }
+
+    public void setTotalDuration(Integer totalDuration) {
+        this.totalDuration = totalDuration;
+    }
+
+    public Integer getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(Integer sortNum) {
+        this.sortNum = sortNum;
+    }
+
+    public Integer getSales() {
         return sales;
     }
 
-    public void setSales(int sales) {
+    public void setSales(Integer sales) {
         this.sales = sales;
     }
 

@@ -5,7 +5,7 @@
 <mapper namespace="com.lagou.dao.UserMapper">
 
     <!-- 用户分页 条件查询 -->
-    <select id="findAllUserByPage" parameterType="com.lagou.entity.UserVo" resultType="com.lagou.entity.User">
+   <!-- <select id="findAllUserByPage" parameterType="com.lagou.entity.UserVo" resultType="com.lagou.entity.User">
         select
          id,
          name,
@@ -32,33 +32,33 @@
                  and create_time between #{startCreateTime} and #{endCreateTime}
              </if>
          </where>
-    </select>
+    </select>-->
 
     <!-- 用户状态设置 -->
-    <update id="updateUserStatus" parameterType="com.lagou.entity.User">
+    <!--<update id="updateUserStatus" parameterType="com.lagou.entity.User">
         update user set status = #{status},update_time = #{update_time} where id = #{id}
     </update>
-
+-->
     <!-- 用户登录 -->
-    <select id="login" parameterType="com.lagou.entity.User" resultType="com.lagou.entity.User">
+    <!--<select id="login" parameterType="com.lagou.entity.User" resultType="com.lagou.entity.User">
         select * from user where phone = #{phone}
-    </select>
+    </select>-->
 
 
 
-    <!-- 根据用户id 清空用户角色关联表信息 -->
+    <!-- 根据用户id 清空用户角色关联表信息
     <delete id="deleteUserContextRoleById" parameterType="int">
         delete from user_role_relation where user_id = #{userId}
     </delete>
 
-    <!-- 重新为用户分配角色 -->
+    &lt;!&ndash; 重新为用户分配角色 &ndash;&gt;
     <insert id="saveUserContextRole" parameterType="com.lagou.entity.User_Role_relation">
         insert into user_role_relation values (null,#{userId},#{roleId},#{createdTime},#{updatedTime},
         #{createdBy},#{updatedBy})
     </insert>
 
-    <!-- 动态菜单显示 -->
-    <!-- 根据用户id 查询关联的角色信息 -->
+    &lt;!&ndash; 动态菜单显示 &ndash;&gt;
+     根据用户id 查询关联的角色信息 -->
     <select id="findUserRelationRoleById" parameterType="int" resultType="com.lagou.entity.Role">
         select * from roles r inner join user_role_relation ur on ur.role_id = r.id
          where ur.user_id = #{userid}

@@ -2,12 +2,15 @@ package com.lagou.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lagou.dao.RoleMapper;
 import com.lagou.dao.UserMapper;
+import com.lagou.dao.UserRoleRelationMapper;
 import com.lagou.entity.*;
 import com.lagou.service.UserService;
 import com.lagou.utils.Md5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
 
@@ -20,6 +23,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private RoleMapper roleMapper;
+
+    @Autowired
+    private UserRoleRelationMapper userRoleRelationMapper;
     /**
      * 用户分页 条件查询
      * @param userVo
@@ -30,7 +38,21 @@ public class UserServiceImpl implements UserService {
 
         PageHelper.startPage(userVo.getCurrentPage(),userVo.getPageSize());
 
-        List<User> userList = userMapper.findAllUserByPage(userVo);
+        Example example = new Example(User.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(userVo.getName() != null && userVo.getName() != ""){
+
+            criteria.andEqualTo("name",userVo.getName());
+        }
+
+        if(userVo.getStartCreateTime() != null && userVo.getEndCreateTime() != null){
+
+            criteria.andBetween("createTime",userVo.getStartCreateTime(),userVo.getEndCreateTime());
+        }
+
+        List<User> userList = userMapper.selectByExample(example);
 
         PageInfo<User> user = new PageInfo<>(userList);
 
@@ -49,10 +71,11 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setId(id);
         user.setStatus(status);
-        user.setUpdate_time(new Date());
+        user.setUpdateTime(new Date());
 
         //调用业务
-        userMapper.updateUserStatus(user);
+        userMapper.updateByPrimaryKeySelective(user);
+        //userMapper.updateUserStatus(user);
     }
 
     /**
@@ -64,7 +87,16 @@ public class UserServiceImpl implements UserService {
     public User login(User user) {
 
         //调用业务
-        User user1 = userMapper.login(user);
+        Example example = new Example(user.getClass());
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(user.getPhone() !=null && user.getPhone() !="") {
+
+            criteria.andEqualTo("phone", user.getPhone());
+        }
+
+        User user1 = userMapper.selectOneByExample(example);
 
         try {
             if(user1 !=null && Md5.verify(user.getPassword(),"lagou",user1.getPassword())){
@@ -81,6 +113,23 @@ public class UserServiceImpl implements UserService {
 
         }
 
+       /* User user1 = userMapper.login(user);
+
+        try {
+            if(user1 !=null && Md5.verify(user.getPassword(),"lagou",user1.getPassword())){
+
+                return user1;
+
+            }else {
+
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+
+        }*/
+
     }
 
     /**
@@ -91,7 +140,39 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Role> findUserRelationRoleById(Integer id) {
 
-        return userMapper.findUserRelationRoleById(id);
+
+        //return userMapper.findUserRelationRoleById(id);
+
+        Example example = new Example(User_Role_relation.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(id != null){
+
+            criteria.andEqualTo("userId",id);
+        }
+
+        List<User_Role_relation> relationList = userRoleRelationMapper.selectByExample(example);
+
+        List<Integer> roleIds = new ArrayList<>();
+
+        for (User_Role_relation user_role_relation : relationList) {
+
+            roleIds.add(user_role_relation.getRoleId());
+        }
+
+        Example example1 = new Example(Role.class);
+
+        Example.Criteria criteria1 = example1.createCriteria();
+
+        if(roleIds != null) {
+
+            criteria1.andIn("id", roleIds);
+
+        }
+        List<Role> roleList = roleMapper.selectByExample(example1);
+
+        return roleList;
     }
 
 
@@ -104,7 +185,18 @@ public class UserServiceImpl implements UserService {
     public void saveUserContextRole(UserRoleVo userRoleVo) {
 
         //根据用户id 清空用户 角色关联表的信息
-        userMapper.deleteUserContextRoleById(userRoleVo.getUserId());
+        //userMapper.deleteUserContextRoleById(userRoleVo.getUserId());
+
+        Example example = new Example(User_Role_relation.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(userRoleVo.getUserId() != null){
+
+            criteria.andEqualTo("userId",userRoleVo.getUserId());
+        }
+
+        userRoleRelationMapper.deleteByExample(example);
 
         //遍历获取的角色id
         List<Integer> roleIdList = userRoleVo.getRoleIdList();
@@ -124,7 +216,8 @@ public class UserServiceImpl implements UserService {
             userRoleRelation.setUpdatedTime(date);
 
             //调用业务
-            userMapper.saveUserContextRole(userRoleRelation);
+            //userMapper.saveUserContextRole(userRoleRelation);
+            userRoleRelationMapper.insertSelective(userRoleRelation);
         }
     }
 

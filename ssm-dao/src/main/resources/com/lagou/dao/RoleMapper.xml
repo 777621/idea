@@ -4,7 +4,7 @@
 
 <mapper namespace="com.lagou.dao.RoleMapper">
 
-    <!-- 根据条件查询角色信息 -->
+   <!--  根据条件查询角色信息
     <select id="findAllRole" parameterType="com.lagou.entity.Role" resultType="com.lagou.entity.Role">
         select * from roles
         <where>
@@ -14,36 +14,36 @@
         </where>
     </select>
 
-    <!-- 根据角色id查询关联的菜单id  -->
+    &lt;!&ndash; 根据角色id查询关联的菜单id  &ndash;&gt;
     <select id="findMenuByRoleId" parameterType="int" resultType="int">
         select m.id from roles r inner join role_menu_relation rm on
         r.id = rm.role_id inner join menu m on m.id = rm.menu_id
         where r.id = #{id}
     </select>
 
-    <!-- 根据角色id清空中间表的关联数据 -->
+    &lt;!&ndash; 根据角色id清空中间表的关联数据 &ndash;&gt;
     <delete id="deleteRoleContextMenu" parameterType="int">
         delete from role_menu_relation where role_id = #{roleId}
     </delete>
 
-    <!-- 重新为角色分配菜单信息 -->
+    &lt;!&ndash; 重新为角色分配菜单信息 &ndash;&gt;
     <insert id="saveRoleContextMenu" parameterType="com.lagou.entity.Role_menu_relation">
         insert into role_menu_relation values (null,#{menuId},#{roleId},#{createdTime},
         #{updatedTime},#{createdBy},#{updatedBy})
     </insert>
 
-    <!-- 删除角色信息 -->
+    &lt;!&ndash; 删除角色信息 &ndash;&gt;
     <delete id="deleteRole" parameterType="int">
         delete from roles where id = #{roleId}
     </delete>
 
-    <!-- 添加角色信息 -->
+    &lt;!&ndash; 添加角色信息 &ndash;&gt;
     <insert id="saveRole" parameterType="com.lagou.entity.Role">
         insert into roles (code,name,description,created_time,updated_time,created_by,updated_by)
         values (#{code},#{name},#{description},#{createdTime},#{updatedTime},#{createdBy},#{updatedBy})
     </insert>
 
-    <!-- 修改角色信息 -->
+    &lt;!&ndash; 修改角色信息 &ndash;&gt;
     <update id="updateRole" parameterType="com.lagou.entity.Role">
         update roles
         <set>
@@ -63,32 +63,32 @@
         where id = #{id}
     </update>
 
-    <!-- 回显角色信息 -->
+    &lt;!&ndash; 回显角色信息 &ndash;&gt;
     <select id="findRoleById" parameterType="int" resultType="com.lagou.entity.Role">
         select name,code,description from roles where id = #{id}
     </select>
 
 
-    <!-- 根据角色id 查询资源列表信息 -->
+    &lt;!&ndash; 根据角色id 查询资源列表信息 &ndash;&gt;
     <select id="findAllResourceCategoryById" parameterType="int" resultType="com.lagou.entity.ResourceCategory">
         select distinct rc.* from resource_category rc inner join
          resource r on r.category_id = rc.id inner join
          role_resource_relation rr on rr.resource_id = r.id  where rr.role_id = #{roleId}
     </select>
-    <!-- 根据角色id 查询关联的资源信息 -->
+    &lt;!&ndash; 根据角色id 查询关联的资源信息 &ndash;&gt;
     <select id="findAllResourceByRoleId" parameterType="int" resultType="com.lagou.entity.Resource">
         select re.* from resource re inner join role_resource_relation ro on re.id = ro.resource_id
         where ro.role_id = #{roleId}
     </select>
 
-    <!-- 根据角色id 清空角色资源中间表信息 -->
+    &lt;!&ndash; 根据角色id 清空角色资源中间表信息 &ndash;&gt;
     <delete id="deleteRoleContextResource" parameterType="int">
         delete from role_resource_relation where role_id = #{id}
     </delete>
 
-    <!-- 重新为角色分配资源 -->
+    &lt;!&ndash; 重新为角色分配资源 &ndash;&gt;
     <insert id="saveRoleContextResource" parameterType="com.lagou.entity.Role_Resource_relation">
         insert into role_resource_relation values (null,#{resourceId},#{roleId},
         #{createdTime},#{updatedTime},#{createdBy},#{updatedBy})
-    </insert>
+    </insert>-->
 </mapper>

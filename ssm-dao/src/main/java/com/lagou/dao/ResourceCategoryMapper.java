@@ -1,42 +1,43 @@
 package com.lagou.dao;
 
 import com.lagou.entity.ResourceCategory;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
 /**
  * 资源分类接口
  */
-public interface ResourceCategoryMapper {
+public interface ResourceCategoryMapper extends Mapper<ResourceCategory> {
 
     /**
      * 查询资源分类列表
      * @return
      */
-    public List<ResourceCategory> findAllResourceCategory();
+    //public List<ResourceCategory> findAllResourceCategory();
 
     /**
      * 添加资源分类信息
      * @param resourceCategory
      */
-    public void saveResourceCategory(ResourceCategory resourceCategory);
+    //public void saveResourceCategory(ResourceCategory resourceCategory);
 
     /**
      * 修改资源分类信息
      * @param resourceCategory
      */
-    public void updateResourceCategory(ResourceCategory resourceCategory);
+    //public void updateResourceCategory(ResourceCategory resourceCategory);
 
     /**
      * 回显资源分类信息
      * @param id
      * @return
      */
-    public ResourceCategory findResourceCategoryById(Integer id);
+    //public ResourceCategory findResourceCategoryById(Integer id);
 
     /**
      * 删除资源分类信息
      * @param id
      */
-    public void deleteResourceCategoryById(Integer id);
+    //public void deleteResourceCategoryById(Integer id);
 }

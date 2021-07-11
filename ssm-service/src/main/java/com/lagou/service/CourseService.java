@@ -1,6 +1,7 @@
 package com.lagou.service;
 
 import com.lagou.entity.Course;
+import com.lagou.entity.CourseTeacherVo;
 import com.lagou.entity.CourseVo;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface CourseService {
      * @param id
      * @return
      */
-    public CourseVo findCourseById(Integer id);
+    public CourseTeacherVo findCourseById(Integer id);
 
     /**
      * 修改课程信息

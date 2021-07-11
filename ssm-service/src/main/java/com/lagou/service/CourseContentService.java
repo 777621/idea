@@ -49,4 +49,10 @@ public interface CourseContentService {
      * @param lesson
      */
     public void saveLesson(CourseLesson lesson);
+
+    /**
+     * 修改课时信息
+     * @param lesson
+     */
+    public void updateLesson(CourseLesson lesson);
 }

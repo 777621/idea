@@ -4,24 +4,24 @@
 <mapper namespace="com.lagou.dao.CourseMapper">
 
     <!-- 根据条件查询课程信息 -->
-    <select id="findCourseByCondition" parameterType="com.lagou.entity.CourseVo"
+    <!--<select id="findCourseByCondition" parameterType="com.lagou.entity.CourseVo"
             resultType="com.lagou.entity.Course">
         select id,course_name,price,sort_num,status from course
         <where>
-            <if test="null !=courseName and courseName !=''">
-                and course_name like concat('%',#{courseName},'%')
-            </if>
-            <if test="null !=status and status !=''">
-                and status = #{status}
-            </if>
             <if test="true">
                 and is_del != 1
             </if>
+            <if test="null !=courseName and courseName !=''">
+                and course_name like concat('%',#{courseName},'%')
+            </if>
+            <if test="null !=status">
+                and status = #{status}
+            </if>
         </where>
-    </select>
+    </select>-->
 
     <!-- 新增课程信息 -->
-    <insert id="saveCourse" parameterType="com.lagou.entity.Course">
+   <!-- <insert id="saveCourse" parameterType="com.lagou.entity.Course">
         INSERT INTO course(
         course_name,
         brief,
@@ -41,14 +41,14 @@
         #{courseListImg},#{sortNum},#{price},#{discounts},#{sales},#{discountsTag},#{courseDescriptionMarkDown},
         #{createTime},#{updateTime})
 
-        <!-- 获取添加成功返回的主键 -->
+        &lt;!&ndash; 获取添加成功返回的主键 &ndash;&gt;
         <selectKey resultType="int" order="AFTER" keyProperty="id">
             select last_insert_id();
         </selectKey>
-    </insert>
+    </insert>-->
 
     <!-- 新增讲师信息  -->
-    <insert id="saveTeacher" parameterType="com.lagou.entity.Teacher">
+    <!--<insert id="saveTeacher" parameterType="com.lagou.entity.Teacher">
         INSERT INTO teacher(
         course_id,
         teacher_name,
@@ -58,20 +58,20 @@
         update_time
         ) VALUES(#{courseId},#{teacherName},#{position},
         #{description},#{createTime},#{updateTime})
-    </insert>
+    </insert>-->
 
     <!-- 根据课程id查询课程 讲师信息 -->
-    <select id="findCourseById" parameterType="int" resultType="com.lagou.entity.CourseVo">
+   <!-- <select id="findCourseById" parameterType="int" resultType="com.lagou.entity.CourseVo">
         SELECT
         c.*,
         t.teacher_name,
         t.POSITION,
         t.description
         FROM course c LEFT JOIN teacher t ON c.id = t.course_id    WHERE c.id = #{id}
-    </select>
+    </select>-->
 
     <!-- 修改课程信息 -->
-    <update id="updateCourse" parameterType="com.lagou.entity.Course">
+   <!-- <update id="updateCourse" parameterType="com.lagou.entity.Course">
         UPDATE course
         <trim prefix ="SET" suffixOverrides=",">
             <if test="courseName != null and courseName != ''">
@@ -117,9 +117,9 @@
         <where>
             <if test="id!=null and id != '' ">id=#{id}</if></where>
     </update>
-
+-->
     <!-- 修改讲师信息 -->
-    <update id="updateTeacher" parameterType="com.lagou.entity.Teacher">
+   <!-- <update id="updateTeacher" parameterType="com.lagou.entity.Teacher">
         UPDATE teacher
         <trim prefix="SET" suffixOverrides=",">
             <if test="teacherName != null and teacherName != ''">
@@ -140,13 +140,13 @@
                 course_id = #{courseId}
             </if>
         </where>
-    </update>
+    </update>-->
 
     <!-- 修改课程状态 -->
-    <update id="updateCourseStatus" parameterType="com.lagou.entity.Course">
+    <!--<update id="updateCourseStatus" parameterType="com.lagou.entity.Course">
         update course set status = #{status},update_time = #{updateTime}
         where id = #{id}
-    </update>
+    </update>-->
     
 
 </mapper>

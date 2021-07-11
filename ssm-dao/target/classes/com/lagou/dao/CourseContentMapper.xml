@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lagou.dao.CourseContentMapper">
 
-    <resultMap id="sectionAndLessonResultMap" type="com.lagou.entity.CourseSection">
+    <!--<resultMap id="sectionAndLessonResultMap" type="com.lagou.entity.CourseSection">
         <id property="id" column="id"/>
         <result property="courseId" column="course_id"/>
         <result property="sectionName" column="section_name"/>
@@ -13,7 +13,7 @@
         <result property="isDel" column="is_del"/>
         <result property="orderNum" column="order_num"/>
 
-        <!-- 使用 collection,配置一对多关系 -->
+        &lt;!&ndash; 使用 collection,配置一对多关系 &ndash;&gt;
         <collection property="lessonList" ofType="com.lagou.entity.CourseLesson">
 
             <id property="id" column="lessonId"></id>
@@ -27,7 +27,7 @@
         </collection>
 
     </resultMap>
-    <!-- 查询课程下的章节和课时信息  -->
+    &lt;!&ndash; 查询课程下的章节和课时信息  &ndash;&gt;
     <select id="findSectionAndLessonByCourseId" parameterType="int"
         resultMap="sectionAndLessonResultMap">
         SELECT
@@ -38,7 +38,7 @@
         WHERE cs.course_id = #{courseId} ORDER BY cs.order_num
     </select>
 
-    <!-- 课时表字段信息   -->
+    &lt;!&ndash; 课时表字段信息   &ndash;&gt;
     <sql id="lesson_column_list">
         cl.id as lessonId,
         cl.course_id,
@@ -49,21 +49,21 @@
         cl.order_num,
         cl.status
     </sql>
-
+-->
     <!-- 回显课程信息 -->
-    <select id="findCourseByCourseId" parameterType="int" resultType="com.lagou.entity.Course">
+   <!-- <select id="findCourseByCourseId" parameterType="int" resultType="com.lagou.entity.Course">
         select id,course_name from course where id = #{courseId}
-    </select>
+    </select>-->
 
     <!-- 添加章节信息 -->
-    <insert id="saveSection" parameterType="com.lagou.entity.CourseSection">
+    <!--<insert id="saveSection" parameterType="com.lagou.entity.CourseSection">
         insert into course_section (course_id,section_name,description,order_num,
         status,create_time,update_time,is_del) values (#{courseId},#{sectionName},
-        #{description},#{orderNum},#{status},#{createTime},#{updateTime},0)
-    </insert>
+        #{description},#{orderNum},#{status},#{createTime},#{updateTime},#{isDel})
+    </insert>-->
 
     <!-- 修改章节信息 -->
-    <update id="updateSection" parameterType="com.lagou.entity.CourseSection">
+   <!-- <update id="updateSection" parameterType="com.lagou.entity.CourseSection">
         update course_section
         <trim prefix="SET" suffixOverrides=",">
             <if test="sectionName != null and sectionName != ''">
@@ -82,19 +82,42 @@
         <where>
             <if test="id != null and id != '' ">id = #{id}</if>
         </where>
-    </update>
+    </update>-->
 
     <!-- 修改章节状态 -->
-    <update id="updateStatus" parameterType="com.lagou.entity.CourseSection">
+   <!-- <update id="updateStatus" parameterType="com.lagou.entity.CourseSection">
         update course_section set status = #{status},update_time = #{updateTime}
         where id = #{id}
     </update>
-
+-->
     <!-- 添加课时信息 -->
-    <insert id="saveLesson" parameterType="com.lagou.entity.CourseLesson">
+   <!-- <insert id="saveLesson" parameterType="com.lagou.entity.CourseLesson">
         insert into course_lesson
         (course_id,section_id,theme,duration,is_free,create_time,update_time,is_del,order_num,status)
         values (#{courseId},#{sectionId},#{theme},#{duration},#{isFree},
         #{createTime},#{updateTime},#{isDel},#{orderNum},#{status})
-    </insert>
+    </insert>-->
+
+    <!-- 修改课时信息 -->
+   <!-- <update id="updateLesson" parameterType="com.lagou.entity.CourseLesson">
+        update course_lesson
+        <set>
+            <if test="theme !=null and theme!=''">
+                theme = #{theme},
+            </if>
+            <if test="duration !=null">
+                duration = #{duration},
+            </if>
+            <if test="isFree !=null and isFree !=''">
+                is_free = #{isFree},
+            </if>
+            <if test="updateTime !=null">
+                update_time = #{updateTime},
+            </if>
+            <if test="orderNum !=null">
+                order_num = #{orderNum},
+            </if>
+        </set>
+        where id = #{id}
+    </update>-->
 </mapper>

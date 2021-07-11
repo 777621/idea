@@ -1,13 +1,14 @@
 package com.lagou.dao;
 
 import com.lagou.entity.PromotionSpace;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
 /**
  * 广告位模块 dao
  */
-public interface PromotionSpaceMapper {
+public interface PromotionSpaceMapper extends Mapper<PromotionSpace> {
 
     /**
      * 广告位列表查询

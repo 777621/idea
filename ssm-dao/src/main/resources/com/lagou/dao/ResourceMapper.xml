@@ -4,7 +4,7 @@
 
 <mapper namespace="com.lagou.dao.ResourceMapper">
 
-    <!-- 分页查询资源列表信息&条件 -->
+    <!-- 分页查询资源列表信息&条件
     <select id="findAllResourceByPage" parameterType="com.lagou.entity.ResourceVo"
             resultType="com.lagou.entity.Resource">
         select * from resource
@@ -24,7 +24,7 @@
         </where>
     </select>
 
-    <!-- 添加资源信息 -->
+    &lt;!&ndash; 添加资源信息 &ndash;&gt;
     <insert id="saveResource" parameterType="com.lagou.entity.Resource">
         insert into resource (name,url,category_id,description,
         created_time,updated_time,created_by,updated_by) values
@@ -32,7 +32,7 @@
         #{createdTime},#{updatedTime},#{createdBy},#{updatedBy})
     </insert>
 
-    <!-- 修改资源信息 -->
+    &lt;!&ndash; 修改资源信息 &ndash;&gt;
     <update id="updateResource" parameterType="com.lagou.entity.Resource">
         update resource
         <set>
@@ -55,17 +55,17 @@
         where id = #{id}
     </update>
 
-    <!-- 根据资源Id删除角色 资源中间表关联信息 -->
+    &lt;!&ndash; 根据资源Id删除角色 资源中间表关联信息 &ndash;&gt;
     <delete id="deleteResourceContextRole" parameterType="int">
         delete from  role_resource_relation where resource_id = #{resourceId}
     </delete>
-    <!-- 删除资源信息 -->
+    &lt;!&ndash; 删除资源信息 &ndash;&gt;
     <delete id="deleteResource" parameterType="int">
         delete from resource where id = #{id}
     </delete>
 
-    <!-- 根据资源id回显资源信息  -->
+    &lt;!&ndash; 根据资源id回显资源信息  &ndash;&gt;
     <select id="findResourceById" parameterType="int" resultType="com.lagou.entity.Resource">
         select * from resource where id = #{id}
-    </select>
+    </select>-->
 </mapper>

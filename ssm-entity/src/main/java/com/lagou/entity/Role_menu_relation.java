@@ -1,15 +1,30 @@
 package com.lagou.entity;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
-public class Role_menu_relation {
+@Table(name = "role_menu_relation")
+public class Role_menu_relation implements Serializable {
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(generator = "JDBC")
     private Integer id;
+    @Column(name = "menu_id")
     private Integer menuId;
+    @Column(name = "role_id")
     private Integer roleId;
+    @Column(name = "created_time")
     private Date createdTime;
+    @Column(name = "updated_time")
     private Date updatedTime;
+    @Column(name = "created_by")
     private String createdBy;
+    @Column(name = "updated_by")
     private String updatedBy;
 
     public Integer getId() {

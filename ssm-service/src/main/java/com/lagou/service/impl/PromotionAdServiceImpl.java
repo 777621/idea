@@ -4,11 +4,14 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lagou.dao.PromotionAdMapper;
+import com.lagou.dao.PromotionSpaceMapper;
 import com.lagou.entity.PromotionAd;
 import com.lagou.entity.PromotionAdVo;
+import com.lagou.entity.PromotionSpace;
 import com.lagou.service.PromotionAdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -22,6 +25,8 @@ public class PromotionAdServiceImpl implements PromotionAdService {
     @Autowired
     private PromotionAdMapper promotionAdMapper;
 
+    @Autowired
+    private PromotionSpaceMapper promotionSpaceMapper;
     /**
      * 分页查询广告信息
      * @param promotionAdVo
@@ -34,8 +39,28 @@ public class PromotionAdServiceImpl implements PromotionAdService {
         PageHelper.startPage(promotionAdVo.getCurrentPage(), promotionAdVo.getPageSize());
 
         //调用业务
-        List<PromotionAd> promotionAdList = promotionAdMapper.findAllPromotionByPage();
+        //List<PromotionAd> promotionAdList = promotionAdMapper.findAllPromotionByPage();
 
+        List<PromotionAd> promotionAdList = promotionAdMapper.selectAll();
+
+        Example example = new Example(PromotionSpace.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        for (PromotionAd promotionAd : promotionAdList) {
+
+            if(promotionAd.getSpaceId() != null) {
+
+                criteria.andEqualTo("id",promotionAd.getSpaceId());
+
+                List<PromotionSpace> spaceList = promotionSpaceMapper.selectByExample(example);
+
+                for (PromotionSpace promotionSpace : spaceList) {
+
+                    promotionAd.setSpaceId(promotionSpace.getId());
+                }
+            }
+        }
         PageInfo<PromotionAd> pageInfo = new PageInfo<>(promotionAdList);
 
         return pageInfo;
@@ -54,7 +79,8 @@ public class PromotionAdServiceImpl implements PromotionAdService {
         promotionAd.setUpdateTime(date);
 
         //调用业务
-        promotionAdMapper.savePromotionAd(promotionAd);
+        promotionAdMapper.insertSelective(promotionAd);
+        //promotionAdMapper.savePromotionAd(promotionAd);
     }
 
     /**
@@ -68,7 +94,8 @@ public class PromotionAdServiceImpl implements PromotionAdService {
         promotionAd.setUpdateTime(new Date());
 
         //调用业务
-        promotionAdMapper.updatePromotionAd(promotionAd);
+        promotionAdMapper.updateByPrimaryKeySelective(promotionAd);
+        //promotionAdMapper.updatePromotionAd(promotionAd);
     }
 
     /**
@@ -79,7 +106,8 @@ public class PromotionAdServiceImpl implements PromotionAdService {
     @Override
     public PromotionAd findPromotionAdById(int id) {
 
-        return promotionAdMapper.findPromotionAdById(id);
+        //return promotionAdMapper.findPromotionAdById(id);
+        return promotionAdMapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -97,6 +125,7 @@ public class PromotionAdServiceImpl implements PromotionAdService {
         promotionAd.setStatus(status);
 
         //调用业务
-        promotionAdMapper.updatePromotionAdStatus(promotionAd);
+        promotionAdMapper.updateByPrimaryKeySelective(promotionAd);
+        //promotionAdMapper.updatePromotionAdStatus(promotionAd);
     }
 }

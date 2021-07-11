@@ -1,17 +1,26 @@
 package com.lagou.entity;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 教师类
  * */
-public class Teacher {
+@Table(name = "teacher")
+public class Teacher implements Serializable {
 
     //id
-    private int id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(generator = "JDBC")
+    private Integer id;
 
     //课程id
-    private int courseId;
+    private Integer courseId;
 
     //讲师姓名
     private String teacherName;
@@ -29,23 +38,9 @@ public class Teacher {
     private Date updateTime;
 
     //是否删除
-    private int isDel;
+    private Integer isDel;
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
 
     public String getTeacherName() {
         return teacherName;
@@ -87,11 +82,27 @@ public class Teacher {
         this.updateTime = updateTime;
     }
 
-    public int getIsDel() {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Integer courseId) {
+        this.courseId = courseId;
+    }
+
+    public Integer getIsDel() {
         return isDel;
     }
 
-    public void setIsDel(int isDel) {
+    public void setIsDel(Integer isDel) {
         this.isDel = isDel;
     }
 

@@ -22,7 +22,8 @@ public class ResourceCategoryServiceImpl implements ResourceCategoryService {
     @Override
     public List<ResourceCategory> findAllResourceCategory() {
 
-        return resourceCategoryMapper.findAllResourceCategory();
+        //return resourceCategoryMapper.findAllResourceCategory();
+        return resourceCategoryMapper.selectAll();
     }
 
     /**
@@ -40,9 +41,9 @@ public class ResourceCategoryServiceImpl implements ResourceCategoryService {
         resourceCategory.setUpdatedTime(date);
 
         //调用业务
-        resourceCategoryMapper.saveResourceCategory(resourceCategory);
+        //resourceCategoryMapper.saveResourceCategory(resourceCategory);
 
-        System.out.println("resourceCategory::::::::::::service"+resourceCategory);
+        resourceCategoryMapper.insertSelective(resourceCategory);
     }
 
     /**
@@ -56,7 +57,8 @@ public class ResourceCategoryServiceImpl implements ResourceCategoryService {
         resourceCategory.setUpdatedTime(new Date());
 
         //调用业务
-        resourceCategoryMapper.updateResourceCategory(resourceCategory);
+        //resourceCategoryMapper.updateResourceCategory(resourceCategory);
+        resourceCategoryMapper.updateByPrimaryKeySelective(resourceCategory);
     }
 
     /**
@@ -67,7 +69,8 @@ public class ResourceCategoryServiceImpl implements ResourceCategoryService {
     @Override
     public ResourceCategory findResourceCategoryById(Integer id) {
 
-        return resourceCategoryMapper.findResourceCategoryById(id);
+        //return resourceCategoryMapper.findResourceCategoryById(id);
+        return resourceCategoryMapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -77,6 +80,7 @@ public class ResourceCategoryServiceImpl implements ResourceCategoryService {
     @Override
     public void deleteResourceCategoryById(Integer id) {
 
-        resourceCategoryMapper.deleteResourceCategoryById(id);
+        //resourceCategoryMapper.deleteResourceCategoryById(id);
+        resourceCategoryMapper.deleteByPrimaryKey(id);
     }
 }

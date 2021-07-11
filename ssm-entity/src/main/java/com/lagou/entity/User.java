@@ -1,10 +1,19 @@
 package com.lagou.entity;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+@Table(name = "user")
+public class User implements Serializable {
 
     // 用户id
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(generator = "JDBC")
     private Integer id;
     // 用户昵称
     private String name;
@@ -27,9 +36,11 @@ public class User {
     // 是否删除
     private Integer is_del;
     // 创建时间
-    private Date create_time;
+    @Column(name = "create_time")
+    private Date createTime;
     // 更新时间
-    private Date update_time;
+    @Column(name = "update_time")
+    private Date updateTime;
 
     public Integer getId() {
         return id;
@@ -119,20 +130,20 @@ public class User {
         this.is_del = is_del;
     }
 
-    public Date getCreate_time() {
-        return create_time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getUpdate_time() {
-        return update_time;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdate_time(Date update_time) {
-        this.update_time = update_time;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     @Override
@@ -149,8 +160,8 @@ public class User {
                 ", account_non_locked=" + account_non_locked +
                 ", status='" + status + '\'' +
                 ", is_del=" + is_del +
-                ", create_time=" + create_time +
-                ", update_time=" + update_time +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
                 '}';
     }
 }

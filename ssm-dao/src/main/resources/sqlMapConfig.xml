@@ -9,4 +9,13 @@
         即从数据库列名 A_COLUMN 到属性名aColumn 的类似映射  a_name  aName-->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
+    <!-- 通用Mapper的插件 -->
+    <plugins>
+        <plugin interceptor="com.github.abel533.mapperhelper.MapperInterceptor">
+            <!--主键自增回写方法,默认值MYSQL -->
+            <property name="IDENTITY" value="MYSQL" />
+            <!--通用Mapper默认接口，我们定义的Mapper需要实现该接口 -->
+            <property name="mappers" value="com.github.abel533.mapper.Mapper" />
+        </plugin>
+    </plugins>
 </configuration>

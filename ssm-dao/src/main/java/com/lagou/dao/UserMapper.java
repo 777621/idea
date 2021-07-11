@@ -1,33 +1,35 @@
 package com.lagou.dao;
 
 import com.lagou.entity.*;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户管理模块 dao接口
  */
-public interface UserMapper {
+public interface UserMapper extends Mapper<User> {
 
     /**
      * 用户分页 条件查询
      * @param userVo
      * @return
      */
-    public List<User> findAllUserByPage(UserVo userVo);
+    //public List<User> findAllUserByPage(UserVo userVo);
 
     /**
      * 用户状态设置
      * @param user
      */
-    public void updateUserStatus(User user);
+    //public void updateUserStatus(User user);
 
     /**
      * 用户登录
      * @param user
      * @return
      */
-    public User login(User user);
+    //public User login(User user);
 
 
     /**

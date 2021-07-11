@@ -3,19 +3,26 @@ package com.lagou.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
 import java.util.Date;
 
+@Table(name = "promotion_ad")
 public class PromotionAd {
 
     // 标识
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(generator = "JDBC")
     private Integer id;
     // 广告名
     private String name;
     // 广告位id
+    @Column(name = "spaceId")
     private Integer spaceId;
     // 精确搜索关键词
     private String keyword;
     // 静态广告的内容
+    @Column(name = "htmlContent")
     private String htmlContent;
     // 文字一
     private String text;
@@ -23,16 +30,20 @@ public class PromotionAd {
     private String link;
     // 开始时间
 
+    @Column(name = "startTime")
     private Date startTime;
     // 结束时间
+    @Column(name = "endTime")
     private Date endTime;
+    @Column(name = "createTime")
     private Date createTime;
+    @Column(name = "updateTime")
     private Date updateTime;
     private Integer status;
     // 优先级
     private Integer priority;
     private String img;
-
+    @Transient
     private PromotionSpace promotionSpace;
 
     public PromotionSpace getPromotionSpace() {

@@ -1,21 +1,30 @@
 package com.lagou.entity;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
+@Table(name = "role_resource_relation")
 public class Role_Resource_relation {
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(generator = "JDBC")
     private Integer id;
 
+    @Column(name = "resource_id")
     private Integer resourceId;
-
+    @Column(name = "role_id")
     private Integer roleId;
-
+    @Column(name = "created_time")
     private Date createdTime;
-
+    @Column(name = "updated_time")
     private Date updatedTime;
-
+    @Column(name = "created_by")
     private String createdBy;
-
+    @Column(name = "updated_by")
     private String updatedBy;
 
     public Integer getId() {

@@ -1,9 +1,7 @@
 package com.lagou.controller;
 
-import com.lagou.entity.Course;
-import com.lagou.entity.CourseLesson;
-import com.lagou.entity.CourseSection;
-import com.lagou.entity.ResponseResult;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.lagou.entity.*;
 import com.lagou.service.CourseContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -101,13 +99,23 @@ public class CourseContentController {
      * @param lesson
      * @return
      */
-    @RequestMapping("/saveLesson")
+    @RequestMapping("/saveOrUpdateLesson")
     public ResponseResult saveLesson(@RequestBody CourseLesson lesson){
 
-        courseContentService.saveLesson(lesson);
+        if(lesson.getId() == null) {
 
-        ResponseResult result = new ResponseResult(true, 200, "添加课时信息成功", null);
+            courseContentService.saveLesson(lesson);
 
-        return result;
+            ResponseResult result = new ResponseResult(true, 200, "添加课时信息成功", null);
+
+            return result;
+        }else {
+
+            courseContentService.updateLesson(lesson);
+
+            ResponseResult result = new ResponseResult(true, 200, "修改课时信息成功", null);
+
+            return result;
+        }
     }
 }

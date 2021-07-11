@@ -1,11 +1,13 @@
 package com.lagou.entity;
 
+import javax.persistence.Transient;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 接收前端参数 根据课程名称 课程状态查询课程信息
  */
-public class CourseVo {
+public class CourseVo implements Serializable {
 
     //主键
     private Integer id;
@@ -17,13 +19,13 @@ public class CourseVo {
     private String brief;
 
     //原价
-    private double price;
+    private Double price;
 
     //原价标签
     private String priceTag;
 
     //优惠价
-    private double discounts;
+    private Double discounts;
 
     //优惠价标签
     private String discountsTag;
@@ -38,28 +40,28 @@ public class CourseVo {
     private String courseImgUrl;
 
     //是否新品
-    private int isNew;
+    private Integer isNew;
 
     //广告语
     private String isNewDes;
 
     //最后操作者
-    private int lastOperatorId;
+    private Integer lastOperatorId;
 
     //是否删除
-    private int isDel;
+    private Integer isDel;
 
     //总时长
-    private int totalDuration;
+    private Integer totalDuration;
 
     //课程列表展示图片
     private String courseListImg;
 
     //课程状态，0-草稿，1-上架
-    private int status;
+    private String status;
 
     //课程排序
-    private int sortNum;
+    private Integer sortNum;
 
     //课程预览第一个字段
     private String previewFirstField;
@@ -68,15 +70,18 @@ public class CourseVo {
     private String previewSecondField;
 
     //销量
-    private int sales;
+    private Integer sales;
 
     //讲师姓名
+    @Transient
     private String teacherName;
 
     //讲师职务
+    @Transient
     private String position;
 
     //介绍
+    @Transient
     private String description;
 
     public Integer getId() {
@@ -85,6 +90,70 @@ public class CourseVo {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setDiscounts(Double discounts) {
+        this.discounts = discounts;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public Double getDiscounts() {
+        return discounts;
+    }
+
+    public Integer getIsNew() {
+        return isNew;
+    }
+
+    public Integer getLastOperatorId() {
+        return lastOperatorId;
+    }
+
+    public Integer getIsDel() {
+        return isDel;
+    }
+
+    public Integer getTotalDuration() {
+        return totalDuration;
+    }
+
+    public Integer getSortNum() {
+        return sortNum;
+    }
+
+    public Integer getSales() {
+        return sales;
+    }
+
+    public void setIsNew(Integer isNew) {
+        this.isNew = isNew;
+    }
+
+    public void setLastOperatorId(Integer lastOperatorId) {
+        this.lastOperatorId = lastOperatorId;
+    }
+
+    public void setIsDel(Integer isDel) {
+        this.isDel = isDel;
+    }
+
+    public void setTotalDuration(Integer totalDuration) {
+        this.totalDuration = totalDuration;
+    }
+
+    public void setSortNum(Integer sortNum) {
+        this.sortNum = sortNum;
+    }
+
+    public void setSales(Integer sales) {
+        this.sales = sales;
     }
 
     public String getCourseName() {
@@ -103,13 +172,6 @@ public class CourseVo {
         this.brief = brief;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
 
     public String getPriceTag() {
         return priceTag;
@@ -119,13 +181,6 @@ public class CourseVo {
         this.priceTag = priceTag;
     }
 
-    public double getDiscounts() {
-        return discounts;
-    }
-
-    public void setDiscounts(double discounts) {
-        this.discounts = discounts;
-    }
 
     public String getDiscountsTag() {
         return discountsTag;
@@ -159,13 +214,7 @@ public class CourseVo {
         this.courseImgUrl = courseImgUrl;
     }
 
-    public int getIsNew() {
-        return isNew;
-    }
 
-    public void setIsNew(int isNew) {
-        this.isNew = isNew;
-    }
 
     public String getIsNewDes() {
         return isNewDes;
@@ -175,29 +224,9 @@ public class CourseVo {
         this.isNewDes = isNewDes;
     }
 
-    public int getLastOperatorId() {
-        return lastOperatorId;
-    }
 
-    public void setLastOperatorId(int lastOperatorId) {
-        this.lastOperatorId = lastOperatorId;
-    }
 
-    public int getIsDel() {
-        return isDel;
-    }
 
-    public void setIsDel(int isDel) {
-        this.isDel = isDel;
-    }
-
-    public int getTotalDuration() {
-        return totalDuration;
-    }
-
-    public void setTotalDuration(int totalDuration) {
-        this.totalDuration = totalDuration;
-    }
 
     public String getCourseListImg() {
         return courseListImg;
@@ -207,21 +236,15 @@ public class CourseVo {
         this.courseListImg = courseListImg;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public int getSortNum() {
-        return sortNum;
-    }
 
-    public void setSortNum(int sortNum) {
-        this.sortNum = sortNum;
-    }
 
     public String getPreviewFirstField() {
         return previewFirstField;
@@ -239,13 +262,6 @@ public class CourseVo {
         this.previewSecondField = previewSecondField;
     }
 
-    public int getSales() {
-        return sales;
-    }
-
-    public void setSales(int sales) {
-        this.sales = sales;
-    }
 
     public String getTeacherName() {
         return teacherName;

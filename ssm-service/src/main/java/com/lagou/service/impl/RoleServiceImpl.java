@@ -1,11 +1,13 @@
 package com.lagou.service.impl;
 
-import com.lagou.dao.RoleMapper;
+import com.lagou.dao.*;
 import com.lagou.entity.*;
 import com.lagou.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +21,20 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleMapper roleMapper;
 
+    @Autowired
+    private RoleMenuRelationMapper roleMenuRelationMapper;
+
+    @Autowired
+    private MenuMapper menuMapper;
+
+    @Autowired
+    private RoleResourceRelationMapper roleResourceRelationMapper;
+
+    @Autowired
+    private ResourceMapper resourceMapper;
+
+    @Autowired
+    private ResourceCategoryMapper resourceCategoryMapper;
     /**
      * 根据条件查询角色信息
      * @param role
@@ -27,7 +43,20 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> findAllRole(Role role) {
 
-        return roleMapper.findAllRole(role);
+        //return roleMapper.findAllRole(role);
+
+        Example example = new Example(Role.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(role.getName() != null && role.getName() != ""){
+
+            criteria.andEqualTo("name",role.getName());
+        }
+
+        List<Role> roleList = roleMapper.selectByExample(example);
+
+        return roleList;
     }
 
     /**
@@ -38,7 +67,44 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Integer> findMenuByRoleId(Integer roleId) {
 
-        return roleMapper.findMenuByRoleId(roleId);
+        Example example = new Example(Role_menu_relation.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(roleId != null){
+
+            criteria.andEqualTo("roleId",roleId);
+        }
+
+        List<Role_menu_relation> relationList = roleMenuRelationMapper.selectByExample(example);
+
+        List<Menu> menuList = null;
+
+        List<Integer> ids = new ArrayList<>();
+
+        for (Role_menu_relation role_menu_relation : relationList) {
+
+            Example example1 = new Example(Menu.class);
+
+            Example.Criteria criteria1 = example1.createCriteria();
+
+            if(role_menu_relation.getMenuId() != null){
+
+                criteria1.andEqualTo("id",role_menu_relation.getMenuId());
+            }
+
+            menuList = menuMapper.selectByExample(example1);
+
+            for (Menu menu : menuList) {
+
+                Integer id = menu.getId();
+
+                ids.add(id);
+            }
+        }
+
+
+        return ids;
     }
 
     /**
@@ -49,7 +115,15 @@ public class RoleServiceImpl implements RoleService {
     public void saveRoleContextMenu(RoleMenuVo roleMenuVo) {
 
         //根据角色id清空关联表中的菜单数据
-        roleMapper.deleteRoleContextMenu(roleMenuVo.getRoleId());
+        //roleMapper.deleteRoleContextMenu(roleMenuVo.getRoleId());
+
+        Example example = new Example(Role_menu_relation.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("roleId",roleMenuVo.getRoleId());
+
+        roleMenuRelationMapper.deleteByExample(example);
 
         //遍历获取分配的菜单id
         List<Integer> menuIdList = roleMenuVo.getMenuIdList();
@@ -71,7 +145,8 @@ public class RoleServiceImpl implements RoleService {
             roleMenuRelation.setUpdatedTime(date);
 
             //调用业务 执行添加操作
-            roleMapper.saveRoleContextMenu(roleMenuRelation);
+            //roleMapper.saveRoleContextMenu(roleMenuRelation);
+            roleMenuRelationMapper.insertSelective(roleMenuRelation);
         }
     }
 
@@ -83,10 +158,26 @@ public class RoleServiceImpl implements RoleService {
     public void deleteRole(Integer roleId) {
 
         //先清空角色菜单关联的中间表信息
-        roleMapper.deleteRoleContextMenu(roleId);
+        //roleMapper.deleteRoleContextMenu(roleId);
+
+        Example example = new Example(Role_menu_relation.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("roleId",roleId);
+
+        roleMenuRelationMapper.deleteByExample(example);
 
         //删除角色信息
-        roleMapper.deleteRole(roleId);
+        //roleMapper.deleteRole(roleId);
+
+        Example example1 = new Example(Role.class);
+
+        Example.Criteria criteria1 = example1.createCriteria();
+
+        criteria1.andEqualTo("id",roleId);
+
+        roleMapper.deleteByExample(example1);
     }
 
     /**
@@ -104,7 +195,9 @@ public class RoleServiceImpl implements RoleService {
         role.setUpdatedTime(date);
 
         //调用业务
-        roleMapper.saveRole(role);
+        //roleMapper.saveRole(role);
+
+        roleMapper.insertSelective(role);
     }
 
     /**
@@ -118,7 +211,9 @@ public class RoleServiceImpl implements RoleService {
         role.setUpdatedTime(new Date());
 
         //调用业务
-        roleMapper.updateRole(role);
+        //roleMapper.updateRole(role);
+
+        roleMapper.updateByPrimaryKeySelective(role);
     }
 
     /**
@@ -129,7 +224,9 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findRoleById(Integer id) {
 
-        return roleMapper.findRoleById(id);
+        //return roleMapper.findRoleById(id);
+
+        return roleMapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -141,8 +238,71 @@ public class RoleServiceImpl implements RoleService {
     public List<ResourceCategory> findAllResourceAndCategoryById(Integer roleId) {
 
         //查询资源信息
-        List<Resource> resourceList = roleMapper.findAllResourceByRoleId(roleId);
-        if(resourceList == null){
+        //List<Resource> resourceList = roleMapper.findAllResourceByRoleId(roleId);
+        Example example = new Example(Role_Resource_relation.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(roleId != null) {
+
+            criteria.andEqualTo("roleId",roleId);
+        }
+
+        List<Role_Resource_relation> relationList = roleResourceRelationMapper.selectByExample(example);
+
+        List<ResourceCategory> resourceCategoryList = null;
+
+        List<Integer> resourceIds = new ArrayList<>();
+
+        for (Role_Resource_relation relation : relationList) {
+
+            Integer resourceId = relation.getResourceId();
+
+            resourceIds.add(resourceId);
+        }
+
+        Example example1 = new Example(Resource.class);
+
+        Example.Criteria criteria1 = example1.createCriteria();
+
+        criteria1.andIn("id",resourceIds);
+
+        List<Resource> resourceList = resourceMapper.selectByExample(example1);
+
+        if(relationList == null){
+
+            return  null;
+        }
+
+        List<Integer> resourceCategoryIds = new ArrayList<>();
+        //查询资源分类信息
+        for (Resource resource : resourceList) {
+
+            Example example2 = new Example(ResourceCategory.class);
+
+            Example.Criteria criteria2 = example2.createCriteria();
+
+
+            if(resource.getCategoryId() != null){
+
+                resourceCategoryIds.add(resource.getCategoryId());
+
+                criteria2.andIn("id",resourceCategoryIds);
+            }
+
+            resourceCategoryList = resourceCategoryMapper.selectByExample(example2);
+
+            for (ResourceCategory resourceCategory : resourceCategoryList) {
+
+                if(resourceCategory.getId().equals(resource.getCategoryId())){
+
+                    resourceCategory.getResourceList().add(resource);
+
+                    break;
+                }
+            }
+        }
+        /*if(resourceList == null){
             return null;
         }
         //查询资源分类信息
@@ -159,7 +319,7 @@ public class RoleServiceImpl implements RoleService {
                     break;
                 }
             }
-        }
+        }*/
 
         return resourceCategoryList;
     }
@@ -173,8 +333,18 @@ public class RoleServiceImpl implements RoleService {
     public void saveRoleContextResource(RoleResourceVo roleResourceVo) {
 
         //根据角色id 清空角色 资源关联表的数据
-        roleMapper.deleteRoleContextResource(roleResourceVo.getRoleId());
+        //roleMapper.deleteRoleContextResource(roleResourceVo.getRoleId());
 
+        Example example = new Example(Role_Resource_relation.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(roleResourceVo.getRoleId() != null){
+
+            criteria.andEqualTo("roleId",roleResourceVo.getRoleId());
+        }
+
+        roleResourceRelationMapper.deleteByExample(example);
         //获取分配的资源id集合
         List<Integer> resourceIdList = roleResourceVo.getResourceIdList();
 
@@ -193,7 +363,8 @@ public class RoleServiceImpl implements RoleService {
             roleResourceRelation.setUpdatedTime(date);
 
             //调用业务
-            roleMapper.saveRoleContextResource(roleResourceRelation);
+            //roleMapper.saveRoleContextResource(roleResourceRelation);
+            roleResourceRelationMapper.insertSelective(roleResourceRelation);
         }
     }
 }

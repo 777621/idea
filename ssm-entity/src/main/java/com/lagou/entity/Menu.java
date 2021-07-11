@@ -3,19 +3,26 @@ package com.lagou.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * 菜单类
  * */
-public class Menu {
+@Table(name = "menu")
+public class Menu implements Serializable {
 
     //主键id
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(generator = "JDBC")
     private Integer id;
 
     //父菜单id
-    private int parentId;
+    @Column(name = "parent_id")
+    private Integer parentId;
 
     //菜单路径
     private String href;
@@ -30,29 +37,35 @@ public class Menu {
     private String description;
 
     //排序号
-    private int orderNum;
+    @Column(name = "order_num")
+    private Integer orderNum;
 
     //是否展示
-    private int shown;
+    private Integer shown;
 
     //菜单层级，从0开始
-    private int level;
+    private Integer level;
 
     //创建时间
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "created_time")
     private Date createdTime;
 
     //更新时间
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "updated_time")
     private Date updatedTime;
 
     //创建人
+    @Column(name = "created_by")
     private String createdBy;
 
     //更新人
+    @Column(name = "updated_by")
     private String updatedBy;
 
     //当前父级菜单下的所有子级菜单
+    @Transient
     private List<Menu> subMenuList;
 
     public List<Menu> getSubMenuList() {
@@ -71,11 +84,11 @@ public class Menu {
         this.id = id;
     }
 
-    public int getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 
@@ -111,27 +124,27 @@ public class Menu {
         this.description = description;
     }
 
-    public int getOrderNum() {
+    public Integer getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(int orderNum) {
+    public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
     }
 
-    public int getShown() {
+    public Integer getShown() {
         return shown;
     }
 
-    public void setShown(int shown) {
+    public void setShown(Integer shown) {
         this.shown = shown;
     }
 
-    public int getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 

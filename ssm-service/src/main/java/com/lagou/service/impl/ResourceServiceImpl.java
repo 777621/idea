@@ -3,11 +3,14 @@ package com.lagou.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lagou.dao.ResourceMapper;
+import com.lagou.dao.RoleResourceRelationMapper;
 import com.lagou.entity.Resource;
 import com.lagou.entity.ResourceVo;
+import com.lagou.entity.Role_Resource_relation;
 import com.lagou.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -17,6 +20,9 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Autowired
     private ResourceMapper resourceMapper;
+
+    @Autowired
+    private RoleResourceRelationMapper roleResourceRelationMapper;
 
     /**
      * 分页 多条件查询资源列表
@@ -28,7 +34,28 @@ public class ResourceServiceImpl implements ResourceService {
 
         PageHelper.startPage(resourceVo.getCurrentPage(),resourceVo.getPageSize());
 
-        List<Resource> resourceList = resourceMapper.findAllResourceByPage(resourceVo);
+        //List<Resource> resourceList = resourceMapper.findAllResourceByPage(resourceVo);
+
+        Example example = new Example(Resource.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(resourceVo.getCategoryId() != null){
+
+            criteria.andEqualTo("categoryId",resourceVo.getCategoryId());
+        }
+
+        if(resourceVo.getName() != null && resourceVo.getName() != ""){
+
+            criteria.andEqualTo("name",resourceVo.getName());
+        }
+
+        if(resourceVo.getUrl() != null && resourceVo.getUrl() != ""){
+
+            criteria.andEqualTo("url",resourceVo.getUrl());
+        }
+
+        List<Resource> resourceList = resourceMapper.selectByExample(example);
 
         PageInfo<Resource> resource = new PageInfo<>(resourceList);
 
@@ -50,7 +77,8 @@ public class ResourceServiceImpl implements ResourceService {
         resource.setUpdatedTime(date);
 
         //调用业务
-        resourceMapper.saveResource(resource);
+        //resourceMapper.saveResource(resource);
+        resourceMapper.insertSelective(resource);
     }
 
     /**
@@ -64,7 +92,8 @@ public class ResourceServiceImpl implements ResourceService {
         resource.setUpdatedTime(new Date());
 
         //调用业务
-        resourceMapper.updateResource(resource);
+        //resourceMapper.updateResource(resource);
+        resourceMapper.updateByPrimaryKeySelective(resource);
     }
 
     /**
@@ -75,10 +104,22 @@ public class ResourceServiceImpl implements ResourceService {
     public void deleteResource(Integer id) {
 
         //根据资源id删除角色 资源中间表的关联数据
-        resourceMapper.deleteResourceContextRole(id);
+        //resourceMapper.deleteResourceContextRole(id);
+
+        Example example = new Example(Role_Resource_relation.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(id != null) {
+
+            criteria.andEqualTo("resourceId", id);
+        }
+
+        roleResourceRelationMapper.deleteByExample(example);
 
         //删除资源信息
-        resourceMapper.deleteResource(id);
+        //resourceMapper.deleteResource(id);
+        resourceMapper.deleteByPrimaryKey(id);
     }
 
     /**
@@ -89,6 +130,7 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public Resource findResourceById(Integer id) {
 
-        return resourceMapper.findResourceById(id);
+        //return resourceMapper.findResourceById(id);
+        return resourceMapper.selectByPrimaryKey(id);
     }
 }

@@ -108,6 +108,8 @@ public class PromotionAdController {
     @RequestMapping("/saveOrUpdatePromotionAd")
     public ResponseResult saveOrUpdatePromotionAd(@RequestBody PromotionAd promotionAd){
 
+        System.out.println("promotionAd:::::::::::::"+promotionAd.toString());
+
         if(promotionAd.getId() == null){
 
             //添加操作

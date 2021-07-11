@@ -24,7 +24,9 @@ public class PromotionSpaceServiceImpl implements PromotionSpaceService {
     @Override
     public List<PromotionSpace> findAllPromotionSpace() {
 
-        return promotionSpaceMapper.findAllPromotionSpace();
+        //return promotionSpaceMapper.findAllPromotionSpace();
+
+        return promotionSpaceMapper.selectAll();
     }
 
     /**
@@ -42,7 +44,8 @@ public class PromotionSpaceServiceImpl implements PromotionSpaceService {
         promotionSpace.setIsDel(0);
 
         //调用业务
-        promotionSpaceMapper.savePromotionSpace(promotionSpace);
+        //promotionSpaceMapper.savePromotionSpace(promotionSpace);
+        promotionSpaceMapper.insertSelective(promotionSpace);
     }
 
     /**
@@ -53,7 +56,8 @@ public class PromotionSpaceServiceImpl implements PromotionSpaceService {
     @Override
     public PromotionSpace findPromotionSpaceById(int id) {
 
-        return promotionSpaceMapper.findPromotionSpaceById(id);
+        //return promotionSpaceMapper.findPromotionSpaceById(id);
+        return promotionSpaceMapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -67,7 +71,8 @@ public class PromotionSpaceServiceImpl implements PromotionSpaceService {
         promotionSpace.setUpdateTime(new Date());
 
         //调用业务
-        promotionSpaceMapper.updatePromotionSpace(promotionSpace);
+        //promotionSpaceMapper.updatePromotionSpace(promotionSpace);
+        promotionSpaceMapper.updateByPrimaryKeySelective(promotionSpace);
 
     }
 }

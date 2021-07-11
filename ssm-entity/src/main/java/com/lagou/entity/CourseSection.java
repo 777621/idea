@@ -1,18 +1,24 @@
 package com.lagou.entity;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 /**
  * 章节类
  * */
+@Table(name = "course_section")
 public class CourseSection {
 
     //id
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(generator="JDBC")
     private Integer id;
 
     //课程id
-    private int courseId;
+    @Column(name = "course_id")
+    private Integer courseId;
 
     //章节名
     private String sectionName;
@@ -27,17 +33,16 @@ public class CourseSection {
     private Date updateTime;
 
     //是否删除
-    private int isDel;
+    private Integer isDel;
 
     //排序
-    private int orderNum;
+    private Integer orderNum;
 
     //状态
-    private int status;
-
-    private List<CourseLesson> LessonList;
+    private Integer status;
 
     //课时集合
+    @Transient
     private List<CourseLesson> lessonList;
 
     public List<CourseLesson> getLessonList() {
@@ -48,21 +53,6 @@ public class CourseSection {
         this.lessonList = lessonList;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public int getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
 
     public String getSectionName() {
         return sectionName;
@@ -96,27 +86,59 @@ public class CourseSection {
         this.updateTime = updateTime;
     }
 
-    public int getIsDel() {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Integer courseId) {
+        this.courseId = courseId;
+    }
+
+    public Integer getIsDel() {
         return isDel;
     }
 
-    public void setIsDel(int isDel) {
+    public void setIsDel(Integer isDel) {
         this.isDel = isDel;
     }
 
-    public int getOrderNum() {
+    public Integer getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(int orderNum) {
+    public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "CourseSection{" +
+                "id=" + id +
+                ", courseId=" + courseId +
+                ", sectionName='" + sectionName + '\'' +
+                ", description='" + description + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", isDel=" + isDel +
+                ", orderNum=" + orderNum +
+                ", status=" + status +
+                ", lessonList=" + lessonList +
+                '}';
     }
 }

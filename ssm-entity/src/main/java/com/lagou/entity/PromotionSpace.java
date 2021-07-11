@@ -1,14 +1,26 @@
 package com.lagou.entity;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
+@Table(name = "promotion_space")
 public class PromotionSpace {
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(generator = "JDBC")
     private Integer id;
     private String name;
+    @Column(name = "spaceKey")
     private String spaceKey;
+    @Column(name = "createTime")
     private Date createTime;
+    @Column(name = "updateTime")
     private Date updateTime;
+    @Column(name = "isDel")
     private Integer isDel;
 
     @Override

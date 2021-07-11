@@ -1,17 +1,31 @@
 package com.lagou.entity;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
-public class Resource {
+@Table(name = "resource")
+public class Resource implements Serializable {
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(generator = "JDBC")
     private Integer id;
     private String name;
     private String url;
+    @Column(name = "category_id")
     private Integer categoryId;
     private String description;
+    @Column(name = "created_time")
     private Date createdTime;
+    @Column(name = "updated_time")
     private Date updatedTime;
+    @Column(name = "created_by")
     private String createdBy;
+    @Column(name = "updated_by")
     private String updatedBy;
 
     public Integer getId() {

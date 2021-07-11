@@ -38,7 +38,7 @@
         <property name="configLocation" value="classpath:sqlMapConfig.xml"></property>
     </bean>
     <!-- 3.配置mapper映射扫描  -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.lagou.dao"></property>
     </bean>
 </beans>

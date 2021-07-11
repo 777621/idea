@@ -1,12 +1,15 @@
 package com.lagou.service.impl;
 
 import com.lagou.dao.CourseContentMapper;
+import com.lagou.dao.CourseLessonMapper;
+import com.lagou.dao.CourseMapper;
 import com.lagou.entity.Course;
 import com.lagou.entity.CourseLesson;
 import com.lagou.entity.CourseSection;
 import com.lagou.service.CourseContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -17,6 +20,11 @@ public class CourseContentServiceImpl implements CourseContentService {
     @Autowired
     private CourseContentMapper courseContentMapper;
 
+    @Autowired
+    private CourseLessonMapper courseLessonMapper;
+
+    @Autowired
+    private CourseMapper courseMapper;
     /**
      * 查询课程下的章节和课时信息
      * @param courseId
@@ -25,7 +33,31 @@ public class CourseContentServiceImpl implements CourseContentService {
     @Override
     public List<CourseSection> findSectionAndLessonByCourseId(int courseId) {
 
-        return courseContentMapper.findSectionAndLessonByCourseId(courseId);
+        CourseSection courseSection = new CourseSection();
+
+        Example example = new Example(courseSection.getClass());
+
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("courseId",courseId);
+
+        List<CourseSection> sectionList = courseContentMapper.selectByExample(example);
+
+        for (CourseSection section : sectionList) {
+
+            Example example1 = new Example(CourseLesson.class);
+
+            Example.Criteria c = example1.createCriteria();
+
+            c.andEqualTo("courseId",section.getCourseId());
+
+            List<CourseLesson> lessonList = courseLessonMapper.selectByExample(example1);
+
+            section.setLessonList(lessonList);
+
+        }
+
+        return sectionList;
     }
 
     /**
@@ -36,7 +68,9 @@ public class CourseContentServiceImpl implements CourseContentService {
     @Override
     public Course findCourseByCourseId(int courseId) {
 
-        return courseContentMapper.findCourseByCourseId(courseId);
+        //return courseContentMapper.findCourseByCourseId(courseId);
+
+        return courseMapper.selectByPrimaryKey(courseId);
     }
 
     /**
@@ -50,9 +84,12 @@ public class CourseContentServiceImpl implements CourseContentService {
         Date date = new Date();
         section.setCreateTime(date);
         section.setUpdateTime(date);
+        section.setIsDel(0);
 
         //调用业务
-        courseContentMapper.saveSection(section);
+
+        courseContentMapper.insertSelective(section);
+        //courseContentMapper.saveSection(section);
     }
 
     /**
@@ -66,7 +103,9 @@ public class CourseContentServiceImpl implements CourseContentService {
         section.setUpdateTime(new Date());
 
         //调用业务
-        courseContentMapper.updateSection(section);
+        //动态修改
+        courseContentMapper.updateByPrimaryKeySelective(section);
+        //courseContentMapper.updateSection(section);
     }
 
     /**
@@ -84,7 +123,9 @@ public class CourseContentServiceImpl implements CourseContentService {
         courseSection.setStatus(status);
 
         //调用业务
-        courseContentMapper.updateStatus(courseSection);
+        courseContentMapper.updateByPrimaryKeySelective(courseSection);
+
+       // courseContentMapper.updateStatus(courseSection);
     }
 
     /**
@@ -101,6 +142,20 @@ public class CourseContentServiceImpl implements CourseContentService {
         lesson.setIsDel(0);
         lesson.setStatus(2);
 
-        courseContentMapper.saveLesson(lesson);
+        courseLessonMapper.insertSelective(lesson);
+        //courseContentMapper.saveLesson(lesson);
+    }
+
+    /**
+     * 修改课时信息
+     * @param lesson
+     */
+    @Override
+    public void updateLesson(CourseLesson lesson) {
+
+        lesson.setUpdateTime(new Date());
+
+        courseLessonMapper.updateByPrimaryKeySelective(lesson);
+        //courseContentMapper.updateLesson(lesson);
     }
 }

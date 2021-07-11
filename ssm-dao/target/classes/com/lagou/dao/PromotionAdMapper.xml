@@ -7,7 +7,7 @@
 
     <!-- 分页查询广告信息  -->
 
-    <resultMap id="ad_space" type="com.lagou.entity.PromotionAd">
+   <!-- <resultMap id="ad_space" type="com.lagou.entity.PromotionAd">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="spaceId" property="spaceId"/>
@@ -29,17 +29,17 @@
     </resultMap>
     <select id="findAllPromotionByPage" resultMap="ad_space">
         select * from promotion_ad
-    </select>
+    </select>-->
 
     <!-- 添加广告信息 -->
-    <insert id="savePromotionAd" parameterType="com.lagou.entity.PromotionAd">
+    <!--<insert id="savePromotionAd" parameterType="com.lagou.entity.PromotionAd">
         insert into promotion_ad (name,spaceId,text,link,startTime,endTime,createTime,updateTime,status,
         priority,img)values (#{name},#{spaceId},#{text},
         #{link},#{startTime},#{endTime},#{createTime},#{updateTime},#{status},#{priority},#{img})
-    </insert>
+    </insert>-->
 
     <!-- 修改广告信息 -->
-    <update id="updatePromotionAd" parameterType="com.lagou.entity.PromotionAd">
+   <!-- <update id="updatePromotionAd" parameterType="com.lagou.entity.PromotionAd">
         update promotion_ad
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null and name != ''">
@@ -72,16 +72,16 @@
         </trim>
         <where>
             <if test="id != null and id != '' ">id = #{id}</if></where>
-    </update>
+    </update>-->
 
     <!-- 回显广告信息 -->
-    <select id="findPromotionAdById" parameterType="int" resultType="com.lagou.entity.PromotionAd">
+    <!--<select id="findPromotionAdById" parameterType="int" resultType="com.lagou.entity.PromotionAd">
         select * from promotion_ad where id = #{id}
-    </select>
+    </select>-->
 
     <!-- 广告状态信息上下线 -->
-    <update id="updatePromotionAdStatus" parameterType="com.lagou.entity.PromotionAd">
+    <!--<update id="updatePromotionAdStatus" parameterType="com.lagou.entity.PromotionAd">
         update promotion_ad set status = #{status},updateTime = #{updateTime}
         where id = #{id}
-    </update>
+    </update>-->
 </mapper>

@@ -1,6 +1,7 @@
 package com.lagou.controller;
 
 import com.lagou.entity.Course;
+import com.lagou.entity.CourseTeacherVo;
 import com.lagou.entity.CourseVo;
 import com.lagou.entity.ResponseResult;
 import com.lagou.service.CourseService;
@@ -130,9 +131,9 @@ public class CourseController {
     @RequestMapping("/findCourseById")
     public ResponseResult findCourseById(@RequestParam("id") Integer id){
 
-        CourseVo course = courseService.findCourseById(id);
+        CourseTeacherVo courseTeacherVo = courseService.findCourseById(id);
 
-        ResponseResult result = new ResponseResult(true, 200, "回显课程信息成功", course);
+        ResponseResult result = new ResponseResult(true, 200, "回显课程信息成功", courseTeacherVo);
 
         return result;
     }
