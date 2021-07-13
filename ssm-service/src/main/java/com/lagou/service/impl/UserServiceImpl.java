@@ -2,9 +2,7 @@ package com.lagou.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lagou.dao.RoleMapper;
-import com.lagou.dao.UserMapper;
-import com.lagou.dao.UserRoleRelationMapper;
+import com.lagou.dao.*;
 import com.lagou.entity.*;
 import com.lagou.service.UserService;
 import com.lagou.utils.Md5;
@@ -13,6 +11,8 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 用户管理模块
@@ -28,6 +28,18 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRoleRelationMapper userRoleRelationMapper;
+
+    @Autowired
+    private RoleMenuRelationMapper roleMenuRelationMapper;
+
+    @Autowired
+    private MenuMapper menuMapper;
+
+    @Autowired
+    private RoleResourceRelationMapper roleResourceRelationMapper;
+
+    @Autowired
+    private ResourceMapper resourceMapper;
     /**
      * 用户分页 条件查询
      * @param userVo
@@ -42,9 +54,9 @@ public class UserServiceImpl implements UserService {
 
         Example.Criteria criteria = example.createCriteria();
 
-        if(userVo.getName() != null && userVo.getName() != ""){
+        if(userVo.getUsername() != null && userVo.getUsername() != ""){
 
-            criteria.andEqualTo("name",userVo.getName());
+            criteria.andEqualTo("name",userVo.getUsername());
         }
 
         if(userVo.getStartCreateTime() != null && userVo.getEndCreateTime() != null){
@@ -229,7 +241,134 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseResult getUserPermissions(Integer id) {
 
-        //获取当前用户所拥有的角色信息
+        //获取当前用户拥有的角色信息
+        Example example = new Example(User_Role_relation.class);
+
+        Example.Criteria criteria = example.createCriteria();
+
+        if(id != null){
+
+            criteria.andEqualTo("userId",id);
+
+            //获取到关联信息中的数据
+            List<User_Role_relation> roleRelations = userRoleRelationMapper.selectByExample(example);
+
+            List<Integer> roleIds = new ArrayList<>();
+
+            List<Menu> parentMenuList = null;
+
+            //取出role_id 查询角色信息
+            for (User_Role_relation roleRelation : roleRelations) {
+
+                Integer roleId = roleRelation.getRoleId();
+
+                Example example1 = new Example(Role.class);
+
+                Example.Criteria criteria1 = example1.createCriteria();
+
+                criteria1.andEqualTo("id",roleId);
+
+                List<Role> roleList = roleMapper.selectByExample(example1);
+
+                //将角色id 保存到集合中
+                for (Role role : roleList) {
+
+                    roleIds.add(role.getId());
+                }
+
+                //根据角色id 查询父菜单信息
+                Example example2 = new Example(Role_menu_relation.class);
+
+                Example.Criteria criteria2 = example2.createCriteria();
+
+                criteria2.andIn("roleId", roleIds);
+
+                //获取菜单角色中间表数据
+                List<Role_menu_relation> menuRelationList = roleMenuRelationMapper.selectByExample(example2)
+                        .stream().distinct().collect(Collectors.toList());
+
+                //取出菜单id 查询菜单信息
+                List<Integer> menuIds = new ArrayList<>();
+
+                for (Role_menu_relation menuRelation : menuRelationList) {
+
+                    Integer menuId = menuRelation.getMenuId();
+
+                    menuIds.add(menuId);
+                }
+
+                //根据菜单id查询父菜单信息
+                Example example3 = new Example(Menu.class);
+
+                Example.Criteria criteria3 = example3.createCriteria();
+
+                criteria3.andIn("id",menuIds).andEqualTo("parentId",-1);
+
+                //获取父菜单信息
+                parentMenuList = menuMapper.selectByExample(example3).stream().distinct().collect(Collectors.toList());
+
+                System.out.println("去重后数据是parentMenuList::::::::::::::::::::::"+parentMenuList);
+
+                for (Menu menu : parentMenuList) {
+                    //根据pid 查询子菜单信息
+                    Integer parentId = menu.getId();
+
+                    //封装子菜单信息
+                    Example e = new Example(Menu.class);
+
+                    Example.Criteria c = e.createCriteria();
+
+                    c.andEqualTo("parentId",parentId);
+
+                    List<Menu> subMenuList = menuMapper.selectByExample(e);
+
+                    menu.setSubMenuList(subMenuList);
+                }
+            }
+
+            //根据角色id 获取资源信息
+            Example example4 = new Example(Role_Resource_relation.class);
+
+            Example.Criteria criteria4 = example4.createCriteria();
+
+            criteria4.andIn("roleId",roleIds);
+
+            List<Role_Resource_relation> resourceRelationList = roleResourceRelationMapper.selectByExample(example4).
+                    stream().distinct().collect(Collectors.toList());
+
+            List<Integer> resourceIds = new ArrayList<>();
+
+            //取出资源id 查询资源信息
+            for (Role_Resource_relation resourceRelation : resourceRelationList) {
+
+                resourceIds.add(resourceRelation.getResourceId());
+            }
+
+            Example example5 = new Example(Resource.class);
+
+            Example.Criteria criteria5 = example5.createCriteria();
+
+            criteria5.andIn("id",resourceIds);
+
+            List<Resource> resourceList = resourceMapper.selectByExample(example5)
+                    .stream().distinct().collect(Collectors.toList());
+
+            System.out.println("去重后数据是resourceList::::::::::::::::::::::"+resourceList);
+
+            //封装数据
+            Map<String,Object> map = new HashMap<>();
+
+            map.put("menuList",parentMenuList);
+            map.put("resourceList",resourceList);
+
+            ResponseResult result = new ResponseResult(true, 200, "动态获取用户权限成功", map);
+
+            return result;
+        }else {
+            return null;
+        }
+
+       /* //获取当前用户所拥有的角色信息
         List<Role> roleList = userMapper.findUserRelationRoleById(id);
 
         //获取角色id 保存到集合
@@ -262,6 +401,6 @@ public class UserServiceImpl implements UserService {
 
         ResponseResult result = new ResponseResult(true, 200, "动态获取用户权限成功", map);
 
-        return result;
+        return result;*/
     }
 }

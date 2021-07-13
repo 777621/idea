@@ -36,20 +36,20 @@ public interface UserMapper extends Mapper<User> {
      * 根据用户id 清空用户角色关联表信息
      * @param UserId
      */
-    public void deleteUserContextRoleById(Integer UserId);
+    //public void deleteUserContextRoleById(Integer UserId);
 
     /**
      * 重新为用户分配角色
      * @param userRoleRelation
      */
-    public void saveUserContextRole(User_Role_relation userRoleRelation);
+   // public void saveUserContextRole(User_Role_relation userRoleRelation);
 
     /**
      * 根据用户Id 查询关联的角色信息
      * @param id
      * @return
      */
-    public List<Role> findUserRelationRoleById(Integer id);
+    //public List<Role> findUserRelationRoleById(Integer id);
 
 
     /**
@@ -57,19 +57,19 @@ public interface UserMapper extends Mapper<User> {
      * @param ids
      * @return
      */
-    public List<Menu> findParentMenuByRoleId(List<Integer> ids);
+    //public List<Menu> findParentMenuByRoleId(List<Integer> ids);
 
     /**
      * 根据pid 查询关联的子菜单信息
      * @param pid
      * @return
      */
-    public List<Menu> findSubMenuByPid(int pid);
+    //public List<Menu> findSubMenuByPid(int pid);
 
     /**
      * 获取用户拥有的资源权限信息
      * @param ids
      * @return
      */
-    public List<Resource> findResourceByRoleId(List<Integer> ids);
+    //public List<Resource> findResourceByRoleId(List<Integer> ids);
 }

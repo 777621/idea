@@ -13,7 +13,7 @@ public class UserVo {
 
     private Integer pageSize;
 
-    private String name;
+    private String username;
 
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date startCreateTime;
@@ -37,12 +37,12 @@ public class UserVo {
         this.pageSize = pageSize;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Date getStartCreateTime() {

@@ -1,6 +1,8 @@
 package com.lagou.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.lagou.entity.Menu;
+import com.lagou.entity.PromotionAdVo;
 import com.lagou.entity.ResponseResult;
 import com.lagou.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +29,9 @@ public class MenuController {
      * @return
      */
     @RequestMapping("/findAllMenu")
-    public ResponseResult findAllMenu(){
+    public ResponseResult findAllMenu(PromotionAdVo promotionAdVo){
 
-        List<Menu> menuList = menuService.findAllMenu();
+        PageInfo<Menu> menuList = menuService.findAllMenu(promotionAdVo);
 
         ResponseResult result = new ResponseResult(true, 200, "查询菜单列表信息成功", menuList);
 

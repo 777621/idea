@@ -59,13 +59,13 @@
 
     &lt;!&ndash; 动态菜单显示 &ndash;&gt;
      根据用户id 查询关联的角色信息 -->
-    <select id="findUserRelationRoleById" parameterType="int" resultType="com.lagou.entity.Role">
+    <!--<select id="findUserRelationRoleById" parameterType="int" resultType="com.lagou.entity.Role">
         select * from roles r inner join user_role_relation ur on ur.role_id = r.id
          where ur.user_id = #{userid}
     </select>
 
 
-    <!-- 根据角色id 查询角色拥有的顶级菜单信息 -->
+    &lt;!&ndash; 根据角色id 查询角色拥有的顶级菜单信息 &ndash;&gt;
     <select id="findParentMenuByRoleId" parameterType="java.util.List" resultType="com.lagou.entity.Menu">
         select distinct m.* from roles r inner join role_menu_relation rm on r.id = rm.role_id
          inner join menu m on rm.menu_id = m.id where m.parent_id = -1 and r.id in
@@ -74,12 +74,12 @@
          </foreach>
     </select>
 
-    <!-- 根据pid 查询关联的子菜单信息 -->
+    &lt;!&ndash; 根据pid 查询关联的子菜单信息 &ndash;&gt;
     <select id="findSubMenuByPid" parameterType="int" resultType="com.lagou.entity.Menu">
         select * from menu where parent_id = #{pid}
     </select>
 
-    <!-- 获取用户拥有的资源权限信息 -->
+    &lt;!&ndash; 获取用户拥有的资源权限信息 &ndash;&gt;
     <select id="findResourceByRoleId" parameterType="java.util.List" resultType="com.lagou.entity.Resource">
         select distinct rc.* from roles r inner join role_resource_relation rrr on
         rrr.role_id = r.id inner join resource rc on rrr.resource_id = rc.id
@@ -87,5 +87,5 @@
         <foreach collection="list" item="item" open="("  separator="," close=")">
             #{item}
         </foreach>
-    </select>
+    </select>-->
 </mapper>

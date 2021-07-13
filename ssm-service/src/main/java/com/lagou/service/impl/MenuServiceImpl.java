@@ -1,14 +1,18 @@
 package com.lagou.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lagou.dao.MenuMapper;
 import com.lagou.dao.RoleMenuRelationMapper;
 import com.lagou.entity.Menu;
+import com.lagou.entity.PromotionAdVo;
 import com.lagou.entity.Role_menu_relation;
 import com.lagou.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,30 +34,32 @@ public class MenuServiceImpl implements MenuService {
      * @return
      */
     @Override
-    public List<Menu> findSubMenuListByPid(int pid) {
+    public List<Menu> findSubMenuListByPid(Integer pid) {
 
         //return menuMapper.findSubMenuListByPid(pid);
-
-        Menu menu = new Menu();
 
         Example example = new Example(Menu.class);
 
         Example.Criteria criteria = example.createCriteria();
 
-        if(menu.getParentId() != null){
+        if(pid != null){
 
             criteria.andEqualTo("parentId",pid);
         }
 
         List<Menu> menuList = menuMapper.selectByExample(example);
 
+        List<Integer> menuIds = new ArrayList<>();
+
         for (Menu menu1 : menuList) {
+
+            menuIds.add(menu1.getId());
 
             Example example1 = new Example(Menu.class);
 
             Example.Criteria criteria1 = example1.createCriteria();
 
-            criteria1.andEqualTo("id",menu1.getId());
+            criteria1.andIn("id",menuIds);
 
             List<Menu> subMenu = menuMapper.selectByExample(example1);
 
@@ -68,11 +74,17 @@ public class MenuServiceImpl implements MenuService {
      * @return
      */
     @Override
-    public List<Menu> findAllMenu() {
+    public PageInfo<Menu> findAllMenu(PromotionAdVo promotionAdVo) {
 
         //return menuMapper.findAllMenu();
 
-        return menuMapper.selectAll();
+        PageHelper.startPage(promotionAdVo.getCurrentPage(),promotionAdVo.getPageSize());
+
+        List<Menu> menuList = menuMapper.selectAll();
+
+        PageInfo<Menu> info = new PageInfo<>(menuList);
+
+        return info;
     }
 
     /**
@@ -101,6 +113,14 @@ public class MenuServiceImpl implements MenuService {
         Date date = new Date();
         menu.setCreatedTime(date);
         menu.setUpdatedTime(date);
+
+        if(menu.getParentId() == -1){
+
+            menu.setLevel(0);
+        }else {
+
+            menu.setLevel(1);
+        }
 
         //调用业务
         //menuMapper.saveMenu(menu);

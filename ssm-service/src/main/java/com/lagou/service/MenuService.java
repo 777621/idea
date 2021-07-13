@@ -1,6 +1,8 @@
 package com.lagou.service;
 
+import com.github.pagehelper.PageInfo;
 import com.lagou.entity.Menu;
+import com.lagou.entity.PromotionAdVo;
 
 import java.util.List;
 
@@ -14,13 +16,13 @@ public interface MenuService {
      * @param pid
      * @return
      */
-    public List<Menu> findSubMenuListByPid(int pid);
+    public List<Menu> findSubMenuListByPid(Integer pid);
 
     /**
      * 查询菜单列表
      * @return
      */
-    public List<Menu> findAllMenu();
+    public PageInfo<Menu> findAllMenu(PromotionAdVo promotionAdVo);
 
     /**
      * 根据菜单id查询菜单信息

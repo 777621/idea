@@ -4,7 +4,7 @@
 
 <mapper namespace="com.lagou.dao.MenuMapper">
 
-    <!-- 查询所有父子菜单信息
+    <!--查询所有父子菜单信息  -->
 
     <resultMap id="menuResult" type="com.lagou.entity.Menu">
         <id column="id" property="id"/>
@@ -29,26 +29,26 @@
         select * from menu where parent_id = #{id}
     </select>
 
-    &lt;!&ndash; 查询菜单列表 &ndash;&gt;
-    <select id="findAllMenu" resultType="com.lagou.entity.Menu">
+    <!--&lt;!&ndash; 查询菜单列表 &ndash;&gt;-->
+   <!-- <select id="findAllMenu" resultType="com.lagou.entity.Menu">
         select * from menu
-    </select>
+    </select>-->
 
-    &lt;!&ndash; 根据菜单Id查询菜单信息 &ndash;&gt;
-    <select id="findMenuById" parameterType="int" resultType="com.lagou.entity.Menu">
+   <!-- &lt;!&ndash; 根据菜单Id查询菜单信息 &ndash;&gt;-->
+   <!-- <select id="findMenuById" parameterType="int" resultType="com.lagou.entity.Menu">
         select * from menu where id = #{id}
-    </select>
+    </select>-->
 
-    &lt;!&ndash; 添加菜单信息 &ndash;&gt;
-    <insert id="saveMenu" parameterType="com.lagou.entity.Menu">
+    <!--&lt;!&ndash; 添加菜单信息 &ndash;&gt;-->
+    <!--<insert id="saveMenu" parameterType="com.lagou.entity.Menu">
         insert into menu (parent_id,href,icon,name,description,order_num,shown,
         level,created_time,updated_time,created_by,updated_by) values (#{parentId},
         #{href},#{icon},#{name},#{description},#{orderNum},#{shown},#{level},
         #{createdTime},#{updatedTime},#{createdBy},#{updatedBy})
     </insert>
-
-    &lt;!&ndash; 修改菜单信息 &ndash;&gt;
-    <update id="updateMenu" parameterType="com.lagou.entity.Menu">
+-->
+   <!-- &lt;!&ndash; 修改菜单信息 &ndash;&gt;-->
+    <!--<update id="updateMenu" parameterType="com.lagou.entity.Menu">
         update menu
         <set>
             <if test="parentId !=null and parentId !=''">
@@ -89,15 +89,15 @@
             </if>
         </set>
         where id = #{id}
-    </update>
+    </update>-->
 
-    &lt;!&ndash; 根据菜单id 清空中间表关联的数据 &ndash;&gt;
-    <delete id="deleteMenuContextRole" parameterType="int">
+    <!--&lt;!&ndash; 根据菜单id 清空中间表关联的数据 &ndash;&gt;-->
+    <!--<delete id="deleteMenuContextRole" parameterType="int">
         delete from role_menu_relation where menu_id = #{menuId}
-    </delete>
+    </delete>-->
 
-    &lt;!&ndash; 删除菜单信息 &ndash;&gt;
-    <delete id="deleteMenu" parameterType="int">
+   <!-- &lt;!&ndash; 删除菜单信息 &ndash;&gt;-->
+   <!-- <delete id="deleteMenu" parameterType="int">
        delete from menu where id = #{id}
     </delete>-->
 </mapper>

@@ -88,9 +88,13 @@ public class RoleServiceImpl implements RoleService {
 
             Example.Criteria criteria1 = example1.createCriteria();
 
+            List<Integer> menuIds = new ArrayList<>();
+
             if(role_menu_relation.getMenuId() != null){
 
-                criteria1.andEqualTo("id",role_menu_relation.getMenuId());
+                menuIds.add(role_menu_relation.getMenuId());
+
+                criteria1.andIn("id",menuIds);
             }
 
             menuList = menuMapper.selectByExample(example1);
@@ -291,6 +295,11 @@ public class RoleServiceImpl implements RoleService {
             }
 
             resourceCategoryList = resourceCategoryMapper.selectByExample(example2);
+
+
+        }
+
+        for (Resource resource : resourceList) {
 
             for (ResourceCategory resourceCategory : resourceCategoryList) {
 
