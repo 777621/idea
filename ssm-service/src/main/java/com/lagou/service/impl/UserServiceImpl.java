@@ -307,8 +307,6 @@ public class UserServiceImpl implements UserService {
                 //获取父菜单信息
                 parentMenuList = menuMapper.selectByExample(example3).stream().distinct().collect(Collectors.toList());
 
-                System.out.println("去重后数据是parentMenuList::::::::::::::::::::::"+parentMenuList);
-
                 for (Menu menu : parentMenuList) {
                     //根据pid 查询子菜单信息
                     Integer parentId = menu.getId();
@@ -352,8 +350,6 @@ public class UserServiceImpl implements UserService {
 
             List<Resource> resourceList = resourceMapper.selectByExample(example5)
                     .stream().distinct().collect(Collectors.toList());
-
-            System.out.println("去重后数据是resourceList::::::::::::::::::::::"+resourceList);
 
             //封装数据
             Map<String,Object> map = new HashMap<>();
